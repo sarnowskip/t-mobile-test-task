@@ -1,0 +1,971 @@
+From 4c3f43b74c3da15a49de3314bd268e9d5b0afdca Mon Sep 17 00:00:00 2001
+From: PiotrekSarnowski <31594970+PiotrekSarnowski@users.noreply.github.com>
+Date: Thu, 25 Jul 2024 10:44:13 +0200
+Subject: initial commit
+
+---
+ .gitignore                                    |  38 +++++
+ .idea/encodings.xml                           |   8 +
+ .idea/misc.xml                                |  14 ++
+ .idea/uiDesigner.xml                          | 124 ++++++++++++++
+ .idea/vcs.xml                                 |   6 +
+ .idea/workspace.xml                           | 151 ++++++++++++++++++
+ pom.xml                                       |  90 +++++++++++
+ src/main/java/com/example/pages/BasePage.java |  14 ++
+ .../java/com/example/pages/BasketPage.java    |  66 ++++++++
+ src/main/java/com/example/pages/HomePage.java | 103 ++++++++++++
+ .../java/com/example/pages/ProductPage.java   |  94 +++++++++++
+ .../com/example/steps/RunCucumberTest.java    |  10 ++
+ .../com/example/steps/StepDefinitions.java    |  96 +++++++++++
+ src/test/resources/features/test.feature      |  11 ++
+ src/test/resources/log4j.properties           |   5 +
+ 15 files changed, 830 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 .idea/encodings.xml
+ create mode 100644 .idea/misc.xml
+ create mode 100644 .idea/uiDesigner.xml
+ create mode 100644 .idea/vcs.xml
+ create mode 100644 .idea/workspace.xml
+ create mode 100644 pom.xml
+ create mode 100644 src/main/java/com/example/pages/BasePage.java
+ create mode 100644 src/main/java/com/example/pages/BasketPage.java
+ create mode 100644 src/main/java/com/example/pages/HomePage.java
+ create mode 100644 src/main/java/com/example/pages/ProductPage.java
+ create mode 100644 src/test/java/com/example/steps/RunCucumberTest.java
+ create mode 100644 src/test/java/com/example/steps/StepDefinitions.java
+ create mode 100644 src/test/resources/features/test.feature
+ create mode 100644 src/test/resources/log4j.properties
+
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..5ff6309
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,38 @@
++target/
++!.mvn/wrapper/maven-wrapper.jar
++!**/src/main/**/target/
++!**/src/test/**/target/
++
++### IntelliJ IDEA ###
++.idea/modules.xml
++.idea/jarRepositories.xml
++.idea/compiler.xml
++.idea/libraries/
++*.iws
++*.iml
++*.ipr
++
++### Eclipse ###
++.apt_generated
++.classpath
++.factorypath
++.project
++.settings
++.springBeans
++.sts4-cache
++
++### NetBeans ###
++/nbproject/private/
++/nbbuild/
++/dist/
++/nbdist/
++/.nb-gradle/
++build/
++!**/src/main/**/build/
++!**/src/test/**/build/
++
++### VS Code ###
++.vscode/
++
++### Mac OS ###
++.DS_Store
+\ No newline at end of file
+diff --git a/.idea/encodings.xml b/.idea/encodings.xml
+new file mode 100644
+index 0000000..e01a0ff
+--- /dev/null
++++ b/.idea/encodings.xml
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Encoding">
++    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/src/test/resources" charset="UTF-8" />
++  </component>
++</project>
+\ No newline at end of file
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+index 0000000..e2044d1
+--- /dev/null
++++ b/.idea/misc.xml
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ExternalStorageConfigurationManager" enabled="true" />
++  <component name="MavenProjectsManager">
++    <option name="originalFiles">
++      <list>
++        <option value="$PROJECT_DIR$/pom.xml" />
++      </list>
++    </option>
++  </component>
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17 (2)" project-jdk-type="JavaSDK">
++    <output url="file://$PROJECT_DIR$/out" />
++  </component>
++</project>
+\ No newline at end of file
+diff --git a/.idea/uiDesigner.xml b/.idea/uiDesigner.xml
+new file mode 100644
+index 0000000..2b63946
+--- /dev/null
++++ b/.idea/uiDesigner.xml
+@@ -0,0 +1,124 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Palette2">
++    <group name="Swing">
++      <item class="com.intellij.uiDesigner.HSpacer" tooltip-text="Horizontal Spacer" icon="/com/intellij/uiDesigner/icons/hspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="1" hsize-policy="6" anchor="0" fill="1" />
++      </item>
++      <item class="com.intellij.uiDesigner.VSpacer" tooltip-text="Vertical Spacer" icon="/com/intellij/uiDesigner/icons/vspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="1" anchor="0" fill="2" />
++      </item>
++      <item class="javax.swing.JPanel" icon="/com/intellij/uiDesigner/icons/panel.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JScrollPane" icon="/com/intellij/uiDesigner/icons/scrollPane.svg" removable="false" auto-create-binding="false" can-attach-label="true">
++        <default-constraints vsize-policy="7" hsize-policy="7" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JButton" icon="/com/intellij/uiDesigner/icons/button.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="0" fill="1" />
++        <initial-values>
++          <property name="text" value="Button" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JRadioButton" icon="/com/intellij/uiDesigner/icons/radioButton.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="RadioButton" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JCheckBox" icon="/com/intellij/uiDesigner/icons/checkBox.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="CheckBox" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JLabel" icon="/com/intellij/uiDesigner/icons/label.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="0" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="Label" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JTextField" icon="/com/intellij/uiDesigner/icons/textField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JPasswordField" icon="/com/intellij/uiDesigner/icons/passwordField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JFormattedTextField" icon="/com/intellij/uiDesigner/icons/formattedTextField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTextArea" icon="/com/intellij/uiDesigner/icons/textArea.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTextPane" icon="/com/intellij/uiDesigner/icons/textPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JEditorPane" icon="/com/intellij/uiDesigner/icons/editorPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JComboBox" icon="/com/intellij/uiDesigner/icons/comboBox.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="2" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JTable" icon="/com/intellij/uiDesigner/icons/table.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JList" icon="/com/intellij/uiDesigner/icons/list.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="2" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTree" icon="/com/intellij/uiDesigner/icons/tree.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTabbedPane" icon="/com/intellij/uiDesigner/icons/tabbedPane.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
++          <preferred-size width="200" height="200" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JSplitPane" icon="/com/intellij/uiDesigner/icons/splitPane.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
++          <preferred-size width="200" height="200" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JSpinner" icon="/com/intellij/uiDesigner/icons/spinner.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JSlider" icon="/com/intellij/uiDesigner/icons/slider.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JSeparator" icon="/com/intellij/uiDesigner/icons/separator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JProgressBar" icon="/com/intellij/uiDesigner/icons/progressbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1" />
++      </item>
++      <item class="javax.swing.JToolBar" icon="/com/intellij/uiDesigner/icons/toolbar.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1">
++          <preferred-size width="-1" height="20" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JToolBar$Separator" icon="/com/intellij/uiDesigner/icons/toolbarSeparator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="0" anchor="0" fill="1" />
++      </item>
++      <item class="javax.swing.JScrollBar" icon="/com/intellij/uiDesigner/icons/scrollbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="0" anchor="0" fill="2" />
++      </item>
++    </group>
++  </component>
++</project>
+\ No newline at end of file
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+index 0000000..35eb1dd
+--- /dev/null
++++ b/.idea/vcs.xml
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+new file mode 100644
+index 0000000..15afdaf
+--- /dev/null
++++ b/.idea/workspace.xml
+@@ -0,0 +1,151 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="AutoImportSettings">
++    <option name="autoReloadType" value="SELECTIVE" />
++  </component>
++  <component name="ChangeListManager">
++    <list default="true" id="d9aec7c0-d2ee-463e-a2ed-964139452f61" name="Changes" comment="">
++      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/pages/BasePage.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/pages/BasketPage.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/pages/HomePage.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/pages/ProductPage.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/steps/RunCucumberTest.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/steps/StepDefinitions.java" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/test/resources/features/test.feature" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/src/test/resources/log4j.properties" afterDir="false" />
++    </list>
++    <option name="SHOW_DIALOG" value="false" />
++    <option name="HIGHLIGHT_CONFLICTS" value="true" />
++    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
++    <option name="LAST_RESOLUTION" value="IGNORE" />
++  </component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="Class" />
++      </list>
++    </option>
++  </component>
++  <component name="Git.Settings">
++    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
++  </component>
++  <component name="MavenImportPreferences">
++    <option name="generalSettings">
++      <MavenGeneralSettings>
++        <option name="localRepository" value="C:\Users\piotr\.m2\repository" />
++        <option name="mavenHome" value="$MAVEN_HOME$" />
++      </MavenGeneralSettings>
++    </option>
++    <option name="importingSettings">
++      <MavenImportingSettings>
++        <option name="downloadAnnotationsAutomatically" value="true" />
++        <option name="downloadDocsAutomatically" value="true" />
++        <option name="downloadSourcesAutomatically" value="true" />
++        <option name="jdkForImporter" value="#JAVA_HOME" />
++      </MavenImportingSettings>
++    </option>
++  </component>
++  <component name="MavenRunner">
++    <option name="delegateBuildToMaven" value="true" />
++    <option name="jreName" value="17 (2)" />
++  </component>
++  <component name="ProblemsViewState">
++    <option name="selectedTabId" value="CurrentFile" />
++  </component>
++  <component name="ProjectId" id="2j9M1v1hzNWbhiKD9vGs3tkBpsX" />
++  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
++  <component name="ProjectViewState">
++    <option name="autoscrollToSource" value="true" />
++    <option name="hideEmptyMiddlePackages" value="true" />
++    <option name="showLibraryContents" value="true" />
++  </component>
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "ASKED_ADD_EXTERNAL_FILES": "true",
++    "RunOnceActivity.OpenProjectViewOnStart": "true",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
++    "git-widget-placeholder": "master",
++    "last_directory_selection": "C:/Users/piotr/IdeaProjects/zadanieRekrutacyjne/src/main/java/com/example",
++    "last_opened_file_path": "C:/Users/piotr/IdeaProjects/zadanieRekrutacyjne",
++    "project.structure.last.edited": "Artifacts",
++    "project.structure.proportion": "0.15",
++    "project.structure.side.proportion": "0.3422263",
++    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices"
++  }
++}]]></component>
++  <component name="RecentsManager">
++    <key name="MoveFile.RECENT_KEYS">
++      <recent name="C:\Users\piotr\IdeaProjects\zadanieRekrutacyjne\src\test" />
++    </key>
++    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
++      <recent name="" />
++    </key>
++  </component>
++  <component name="RunManager" selected="JUnit.RunCucumberTest">
++    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
++      <option name="MAIN_CLASS_NAME" value="Main" />
++      <module name="zadanieRekrutacyjne" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value=".*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <configuration name="RunCucumberTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
++      <module name="zadanieRekrutacyjne" />
++      <extension name="coverage">
++        <pattern>
++          <option name="PATTERN" value="com.example.steps.*" />
++          <option name="ENABLED" value="true" />
++        </pattern>
++      </extension>
++      <option name="PACKAGE_NAME" value="com.example.steps" />
++      <option name="MAIN_CLASS_NAME" value="com.example.steps.RunCucumberTest" />
++      <option name="TEST_OBJECT" value="class" />
++      <method v="2">
++        <option name="Make" enabled="true" />
++      </method>
++    </configuration>
++    <recent_temporary>
++      <list>
++        <item itemvalue="JUnit.RunCucumberTest" />
++        <item itemvalue="Application.Main" />
++      </list>
++    </recent_temporary>
++  </component>
++  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
++  <component name="TaskManager">
++    <task active="true" id="Default" summary="Default task">
++      <changelist id="d9aec7c0-d2ee-463e-a2ed-964139452f61" name="Changes" comment="" />
++      <created>1720794629935</created>
++      <option name="number" value="Default" />
++      <option name="presentableId" value="Default" />
++      <updated>1720794629935</updated>
++    </task>
++    <servers />
++  </component>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+diff --git a/pom.xml b/pom.xml
+new file mode 100644
+index 0000000..8907993
+--- /dev/null
++++ b/pom.xml
+@@ -0,0 +1,90 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project xmlns="http://maven.apache.org/POM/4.0.0"
++         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
++    <modelVersion>4.0.0</modelVersion>
++
++    <groupId>com.example</groupId>
++    <artifactId>zadanieRekrutacyjne</artifactId>
++    <version>1.0-SNAPSHOT</version>
++
++    <dependencies>
++        <!-- Selenium WebDriver dependency -->
++        <dependency>
++            <groupId>org.seleniumhq.selenium</groupId>
++            <artifactId>selenium-java</artifactId>
++            <version>${selenium.version}</version>
++        </dependency>
++        <!-- Cucumber dependencies -->
++        <dependency>
++            <groupId>io.cucumber</groupId>
++            <artifactId>cucumber-java</artifactId>
++            <version>${cucumber.version}</version>
++        </dependency>
++        <dependency>
++            <groupId>io.cucumber</groupId>
++            <artifactId>cucumber-junit</artifactId>
++            <version>${cucumber.version}</version>
++        </dependency>
++        <!-- JUnit dependency -->
++        <dependency>
++            <groupId>org.junit.jupiter</groupId>
++            <artifactId>junit-jupiter-engine</artifactId>
++            <version>${junit.version}</version>
++            <scope>test</scope>
++        </dependency>
++        <dependency>
++            <groupId>log4j</groupId>
++            <artifactId>log4j</artifactId>
++            <version>1.2.17</version>
++        </dependency>
++        <dependency>
++            <groupId>commons-io</groupId>
++            <artifactId>commons-io</artifactId>
++            <version>2.11.0</version>
++        </dependency>
++    </dependencies>
++
++    <properties>
++        <maven.compiler.source>17</maven.compiler.source>
++        <maven.compiler.target>17</maven.compiler.target>
++        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
++        <cucumber.version>7.0.0</cucumber.version>
++        <selenium.version>4.1.2</selenium.version>
++        <junit.version>5.7.0</junit.version>
++    </properties>
++
++    <build>
++        <plugins>
++            <!-- Compiler plugin to set Java version -->
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-compiler-plugin</artifactId>
++                <version>3.8.1</version>
++                <configuration>
++                    <source>${maven.compiler.source}</source>
++                    <target>${maven.compiler.target}</target>
++                </configuration>
++            </plugin>
++            <!-- Surefire plugin to run tests -->
++            <plugin>
++                <groupId>org.apache.maven.plugins</groupId>
++                <artifactId>maven-surefire-plugin</artifactId>
++                <version>2.22.2</version>
++                <configuration>
++                    <includes>
++                        <include>**/RunCucumberTest.java</include>
++                    </includes>
++                </configuration>
++            </plugin>
++        </plugins>
++    </build>
++
++    <repositories>
++        <repository>
++            <id>central</id>
++            <url>https://repo.maven.apache.org/maven2</url>
++        </repository>
++    </repositories>
++
++</project>
+\ No newline at end of file
+diff --git a/src/main/java/com/example/pages/BasePage.java b/src/main/java/com/example/pages/BasePage.java
+new file mode 100644
+index 0000000..c0a2809
+--- /dev/null
++++ b/src/main/java/com/example/pages/BasePage.java
+@@ -0,0 +1,14 @@
++package com.example.pages;
++
++
++import org.openqa.selenium.WebDriver;
++import org.openqa.selenium.support.PageFactory;
++
++public class BasePage {
++    protected WebDriver driver;
++
++    public BasePage(WebDriver driver) {
++        this.driver = driver;
++        PageFactory.initElements(driver, this);
++    }
++}
+diff --git a/src/main/java/com/example/pages/BasketPage.java b/src/main/java/com/example/pages/BasketPage.java
+new file mode 100644
+index 0000000..03735db
+--- /dev/null
++++ b/src/main/java/com/example/pages/BasketPage.java
+@@ -0,0 +1,66 @@
++package com.example.pages;
++
++import org.openqa.selenium.WebDriver;
++import org.openqa.selenium.WebElement;
++import org.openqa.selenium.support.FindBy;
++import org.openqa.selenium.support.ui.ExpectedConditions;
++import org.openqa.selenium.support.ui.WebDriverWait;
++
++public class BasketPage extends BasePage {
++
++    @FindBy(css = "body.page-sklep-basket")
++    private WebElement basketPageBody;
++
++    @FindBy(xpath = "//div[@data-qa='BKT_TotalupFront']")
++    private WebElement startAmount;
++
++    @FindBy(xpath = "//div[@data-qa='BKT_TotalMonthlySymbol']")
++    private WebElement monthlyRateAmount;
++
++    public BasketPage(WebDriver driver) {
++        super(driver);
++    }
++
++    public boolean isBasketPageDisplayed() {
++        WebDriverWait wait = new WebDriverWait(driver, 3);
++        System.out.println("Checking if the basket page is displayed...");
++        try {
++            wait.until(ExpectedConditions.visibilityOf(basketPageBody));
++            boolean isDisplayed = basketPageBody.isDisplayed();
++            System.out.println("Basket page displayed: " + isDisplayed);
++            return basketPageBody.isDisplayed();
++        } catch (Exception e) {
++            System.out.println("Basket page is not displayed. Error: " + e.getMessage());
++            return false;
++        }
++    }
++
++    public String getStartAmount() {
++        String amountText = startAmount.getText();
++        String numericValue = extractNumericValueAsString(amountText);
++        System.out.println("Start amount in basket: " + numericValue);
++        return extractNumericValueAsString(amountText);
++
++    }
++
++    public String getMonthlyRateAmount() {
++        String amountText = monthlyRateAmount.getText();
++        String numericValue = extractNumericValueAsString(amountText);
++        System.out.println("Monthly rate amount in basket: " + numericValue);
++        return extractNumericValueAsString(amountText);
++    }
++
++    private String extractNumericValueAsString(String text) {
++        // Usuń wszystkie znaki nie będące cyframi, kropką ani przecinkiem
++        String numericText = text.replaceAll("[^\\d.,]", "");
++        return numericText;
++    }
++
++    public HomePage navigateBackToHomePage() {
++        System.out.println("Navigating back to the homepage...");
++        driver.get("https://www.t-mobile.pl/");
++        System.out.println("Navigated back to the homepage.");
++        return new HomePage(driver);
++    }
++}
++
+diff --git a/src/main/java/com/example/pages/HomePage.java b/src/main/java/com/example/pages/HomePage.java
+new file mode 100644
+index 0000000..ef1fbca
+--- /dev/null
++++ b/src/main/java/com/example/pages/HomePage.java
+@@ -0,0 +1,103 @@
++package com.example.pages;
++
++import org.openqa.selenium.By;
++import org.openqa.selenium.WebDriver;
++import org.openqa.selenium.WebElement;
++import org.openqa.selenium.interactions.Actions;
++import org.openqa.selenium.support.FindBy;
++import org.openqa.selenium.support.ui.ExpectedConditions;
++import org.openqa.selenium.support.ui.WebDriverWait;
++
++import java.time.Duration;
++
++public class HomePage extends BasePage {
++
++    @FindBy(xpath = "//div[contains(@class, 'styles__StyledCards-sc-176tmlw-0')]/div[1]//a")
++    private WebElement firstProductButton;
++
++    @FindBy(css = "a[title='Koszyk']")
++    private WebElement basketIcon;
++
++    @FindBy(css = "div.rounded-full.text-[#e20075].!bg-base-primary-600.!text-white")
++    private WebElement itemCount;
++
++    public HomePage(WebDriver driver) {
++        super(driver);
++    }
++
++    public void acceptCookies() {
++        System.out.println("Checking for cookies popup...");
++        try {
++            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
++            WebElement popUpAgreeButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("didomi-notice-agree-button")));
++
++            if (popUpAgreeButton.isDisplayed()) {
++                System.out.println("Cookies popup found. Clicking 'Accept'...");
++                popUpAgreeButton.click();
++                wait.until(ExpectedConditions.invisibilityOf(popUpAgreeButton));
++                System.out.println("Cookies popup accepted and closed.");
++            }
++        } catch (Exception e) {
++            System.out.println("Cookies popup not found or another issue: " + e.getMessage());
++        }
++    }
++
++    public void hoverOverDevicesMenu(String topMenuOption) {
++        System.out.println("Hovering over top menu option: " + topMenuOption);
++        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
++
++        try {
++            WebElement devicesMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='" + topMenuOption + "']")));
++            Actions actions = new Actions(driver);
++            actions.moveToElement(devicesMenu).perform();
++            System.out.println("Hovered over top menu option: " + topMenuOption);
++        } catch (Exception e) {
++            System.out.println("Failed to hover over top menu option: " + e.getMessage());
++        }
++    }
++
++    public void clickLinkFromColumn(String linkText, String columnText) {
++        System.out.println("Attempting to click link: '" + linkText + "' in column: '" + columnText + "'");
++        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
++
++        try {
++            WebElement linkElement = wait.until(ExpectedConditions.elementToBeClickable(
++                    By.xpath("//p[normalize-space()='" + columnText + "']/ancestor::li//a[contains(@href, 'filter.categoryDevice%5B%5D') and contains(normalize-space(), '" + linkText + "')]")
++            ));
++            linkElement.click();
++            System.out.println("Clicked link: '" + linkText + "' in column: '" + columnText + "'");
++        } catch (Exception e) {
++            System.out.println("Failed to click link: '" + linkText + "' in column: '" + columnText + "'. Error: " + e.getMessage());
++        }
++    }
++
++    public ProductPage clickFirstItemInList() {
++        System.out.println("Clicking on the first product in the list...");
++        try {
++            firstProductButton.click();
++            System.out.println("Successfully clicked on the first product.");
++        } catch (Exception e) {
++            System.out.println("Failed to click on the first product. Error: " + e.getMessage());
++        }
++        return new ProductPage(driver);
++    }
++
++    public boolean isBasketIconDisplayed() {
++        System.out.println("Checking if the basket icon is displayed...");
++        boolean displayed = basketIcon.isDisplayed();
++        System.out.println("Basket icon displayed: " + displayed);
++        return displayed;
++    }
++
++    public int getNumberOfItemsInBasket() {
++        System.out.println("Getting the number of items in the basket...");
++        try {
++            int count = Integer.parseInt(itemCount.getText());
++            System.out.println("Number of items in the basket: " + count);
++            return count;
++        } catch (NumberFormatException e) {
++            System.out.println("Failed to get the number of items in the basket. Error: " + e.getMessage());
++            return 0;
++        }
++    }
++}
+diff --git a/src/main/java/com/example/pages/ProductPage.java b/src/main/java/com/example/pages/ProductPage.java
+new file mode 100644
+index 0000000..f12a0e3
+--- /dev/null
++++ b/src/main/java/com/example/pages/ProductPage.java
+@@ -0,0 +1,94 @@
++package com.example.pages;
++
++import org.openqa.selenium.*;
++import org.openqa.selenium.support.FindBy;
++import org.openqa.selenium.support.PageFactory;
++import org.openqa.selenium.support.ui.ExpectedConditions;
++import org.openqa.selenium.support.ui.WebDriverWait;
++
++import java.time.Duration;
++
++public class ProductPage extends BasePage {
++
++    @FindBy(css = "button[data-qa='PRD_AddToBasket']")
++    private WebElement addToBasketButton;
++
++    @FindBy(xpath = "//div[@data-qa='PRD_TotalUpfront']")
++    private WebElement startAmount;
++
++    @FindBy(xpath = "//div[@class='sc-gzzPqb jkzHzl dt_typography variant_h4 value']//div[@class='dt_price_change']//div[contains(@class, 'sc-gzzPqb') and contains(@class, 'jkzHzl') and contains(@class, 'dt_typography') and contains(@class, 'variant_h4')]")
++    private WebElement monthlyRateAmount;
++
++    public ProductPage(WebDriver driver) {
++        super(driver);
++        PageFactory.initElements(driver, this);
++    }
++
++    public void clickUsingJavaScript(WebElement element) {
++        JavascriptExecutor js = (JavascriptExecutor) driver;
++        js.executeScript("arguments[0].click();", element);
++    }
++
++    public BasketPage addToBasket() {
++        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
++
++        // Sprawdzenie, czy element jest obecny w DOM
++        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("button[data-qa='PRD_AddToBasket']")));
++
++        // Przewinięcie strony do przycisku za pomocą JavaScript
++        JavascriptExecutor js = (JavascriptExecutor) driver;
++        js.executeScript("arguments[0].scrollIntoView(true);", addToBasketButton);
++        try {
++            Thread.sleep(2000); // Krótkie opóźnienie, aby upewnić się, że przewinięcie się zakończyło
++        } catch (InterruptedException ex) {
++            Thread.currentThread().interrupt();
++        }
++
++        // Wypisanie informacji o rodzicu przycisku
++        WebElement parentElement = addToBasketButton.findElement(By.xpath(".."));
++        String parentTagName = parentElement.getTagName();
++        String parentOuterHTML = parentElement.getAttribute("outerHTML");
++        System.out.println("Tag rodzica: " + parentTagName);
++        System.out.println("Pełny HTML rodzica: " + parentOuterHTML);
++
++        // Kliknięcie przycisku za pomocą JavaScript
++        clickUsingJavaScript(addToBasketButton);
++        System.out.println("Wywołanie metody clickUsingJavaScript(addToBasketButton) przebiegło pomyślnie.");
++
++        return new BasketPage(driver);
++    }
++
++    public boolean isElementVisible(WebElement element, int timeoutInSeconds) {
++        try {
++            WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
++            wait.until(ExpectedConditions.visibilityOf(element));
++            return element.isDisplayed();
++        } catch (NoSuchElementException e) {
++            return false;
++        }
++    }
++
++    public String getStartAmount() {
++        if (isElementVisible(startAmount, 5)) {
++            String amountText = startAmount.getText();
++            return extractNumericValueAsString(amountText);
++        } else {
++            throw new RuntimeException("Element 'startAmount' is not visible on the page.");
++        }
++    }
++
++    public String getMonthlyRateAmount() {
++        if (isElementVisible(monthlyRateAmount, 5)) {
++            String amountText = monthlyRateAmount.getText();
++            return extractNumericValueAsString(amountText);
++        } else {
++            throw new RuntimeException("Element 'monthlyRateAmount' is not visible on the page.");
++        }
++    }
++
++    private String extractNumericValueAsString(String text) {
++        // Usuń wszystkie znaki nie będące cyframi, kropką ani przecinkiem
++        String numericText = text.replaceAll("[^\\d.,]", "");
++        return numericText;
++    }
++}
+\ No newline at end of file
+diff --git a/src/test/java/com/example/steps/RunCucumberTest.java b/src/test/java/com/example/steps/RunCucumberTest.java
+new file mode 100644
+index 0000000..b80163a
+--- /dev/null
++++ b/src/test/java/com/example/steps/RunCucumberTest.java
+@@ -0,0 +1,10 @@
++package com.example.steps;
++
++import io.cucumber.junit.Cucumber;
++import io.cucumber.junit.CucumberOptions;
++import org.junit.runner.RunWith;
++
++@RunWith(Cucumber.class)
++@CucumberOptions(features = "src/test/resources/features", glue = "com.example.steps")
++public class RunCucumberTest {
++}
+diff --git a/src/test/java/com/example/steps/StepDefinitions.java b/src/test/java/com/example/steps/StepDefinitions.java
+new file mode 100644
+index 0000000..29a1d98
+--- /dev/null
++++ b/src/test/java/com/example/steps/StepDefinitions.java
+@@ -0,0 +1,96 @@
++package com.example.steps;
++
++import com.example.pages.BasketPage;
++import com.example.pages.HomePage;
++import com.example.pages.ProductPage;
++import io.cucumber.java.Before;
++import io.cucumber.java.After;
++import io.cucumber.java.en.Given;
++import io.cucumber.java.en.Then;
++import io.cucumber.java.en.When;
++import org.openqa.selenium.By;
++import org.openqa.selenium.WebDriver;
++import org.openqa.selenium.chrome.ChromeDriver;
++import org.openqa.selenium.chrome.ChromeOptions;
++import org.openqa.selenium.support.ui.ExpectedConditions;
++import org.openqa.selenium.support.ui.WebDriverWait;
++
++import java.time.Duration;
++
++import static org.junit.Assert.*;
++
++public class StepDefinitions {
++
++    private WebDriver driver;
++    private HomePage homePage;
++    private ProductPage productPage;
++    private BasketPage basketPage;
++
++    @Before
++    public void setUp() {
++        System.setProperty("webdriver.chrome.driver", "C:\\Users\\piotr\\Desktop\\chromedriver-win64\\chromedriver.exe");
++        ChromeOptions options = new ChromeOptions();
++        options.addArguments("--remote-allow-origins=*");
++        options.addArguments("--disable-web-security");
++        options.addArguments("--disable-site-isolation-trials");
++        driver = new ChromeDriver(options);
++    }
++
++    @Given("the user is on the T-Mobile homepage")
++    public void theUserIsOnTheTMobileHomepage() {
++        driver.get("https://www.t-mobile.pl/");
++        homePage = new HomePage(driver);
++        homePage.acceptCookies();
++
++        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
++        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("didomi-notice-agree-button")));
++
++    }
++
++
++    @When("the user selects {string} from the top menu")
++    public void theUserSelectsFromTheTopMenu(String topMenuOption) {
++        homePage.hoverOverDevicesMenu(topMenuOption);
++    }
++
++    @When("the user clicks {string} from the {string} column")
++    public void theUserClicksFromTheColumn(String bezAbonamentu, String innerMenuColumn) {
++        homePage.clickLinkFromColumn(bezAbonamentu, innerMenuColumn);
++    }
++
++    @When("the user clicks the first item in the list")
++    public void theUserClicksTheFirstItemInTheList() {
++        productPage = homePage.clickFirstItemInList();
++    }
++
++    @When("the user adds the product to the basket")
++    public void theUserAddsTheProductToTheBasket() {
++        basketPage = productPage.addToBasket();
++    }
++
++    @Then("the user should see the basket page with correct prices")
++    public void theUserShouldSeeTheBasketPageWithCorrectPrices() {
++        assertTrue(basketPage.isBasketPageDisplayed());
++        assertEquals(productPage.getStartAmount(), basketPage.getStartAmount());
++        assertEquals(productPage.getMonthlyRateAmount(), basketPage.getMonthlyRateAmount());
++    }
++
++    @When("the user navigates back to the homepage")
++    public void theUserNavigatesBackToTheHomepage() {
++        homePage = basketPage.navigateBackToHomePage();
++    }
++
++    @Then("the basket icon with correct number of items should be displayed")
++    public void theBasketIconWithCorrectNumberOfItemsShouldBeDisplayed() {
++        assertTrue(homePage.isBasketIconDisplayed());
++        assertEquals(1, homePage.getNumberOfItemsInBasket());
++    }
++
++    @After
++    public void tearDown() {
++        // Zamknięcie przeglądarki po zakończeniu testu
++        if (driver != null) {
++            driver.quit();
++        }
++    }
++}
+diff --git a/src/test/resources/features/test.feature b/src/test/resources/features/test.feature
+new file mode 100644
+index 0000000..c188f45
+--- /dev/null
++++ b/src/test/resources/features/test.feature
+@@ -0,0 +1,11 @@
++Feature: T-Mobile website test
++
++  Scenario: Add smartwatch to basket
++    Given the user is on the T-Mobile homepage
++    When the user selects "Urządzenia" from the top menu
++    And the user clicks "Bez abonamentu" from the "Smartwatche i opaski" column
++    And the user clicks the first item in the list
++    And the user adds the product to the basket
++    Then the user should see the basket page with correct prices
++    When the user navigates back to the homepage
++    Then the basket icon with correct number of items should be displayed
+\ No newline at end of file
+diff --git a/src/test/resources/log4j.properties b/src/test/resources/log4j.properties
+new file mode 100644
+index 0000000..3e9cf41
+--- /dev/null
++++ b/src/test/resources/log4j.properties
+@@ -0,0 +1,5 @@
++log4j.rootLogger=DEBUG, stdout
++log4j.appender.stdout=org.apache.log4j.ConsoleAppender
++log4j.appender.stdout.Target=System.out
++log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
++log4j.appender.stdout.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+\ No newline at end of file
+-- 
+2.24.1.windows.2
+
