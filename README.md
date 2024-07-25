@@ -1,2 +1,2 @@
-# t-mobilie-test-task
+# t-mobile-test-task
 T-Mobile Piotr Sarnowski Recruitment Task
