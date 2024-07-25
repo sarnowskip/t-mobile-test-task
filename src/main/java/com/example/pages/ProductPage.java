@@ -47,13 +47,11 @@ public class ProductPage extends BasePage {
         // Wypisanie informacji o rodzicu przycisku
         WebElement parentElement = addToBasketButton.findElement(By.xpath(".."));
         String parentTagName = parentElement.getTagName();
-        String parentOuterHTML = parentElement.getAttribute("outerHTML");
-        System.out.println("Tag rodzica: " + parentTagName);
-        System.out.println("Pełny HTML rodzica: " + parentOuterHTML);
+        System.out.println("Parent tag: " + parentTagName);
 
         // Kliknięcie przycisku za pomocą JavaScript
         clickUsingJavaScript(addToBasketButton);
-        System.out.println("Wywołanie metody clickUsingJavaScript(addToBasketButton) przebiegło pomyślnie.");
+        System.out.println("The execution of the method clickUsingJavaScript(addToBasketButton) was successful.");
 
         return new BasketPage(driver);
     }
